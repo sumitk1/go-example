@@ -5,12 +5,17 @@ import (
 	"net/http"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
+func echo(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "yoo people wassup!")
 }
 
-func main() {
-	http.HandleFunc("/", handler)
+//func UrlParams(w http.ResponseWriter, r *http.Request) {
+//	if (r.)
+//}
 
-	http.ListenAndServe(":8080", nil)
+func main() {
+	http.HandleFunc("/", echo)
+	//http.HandleFunc("/user/", UrlParams)
+
+	http.ListenAndServe(":4080", nil)
 }
