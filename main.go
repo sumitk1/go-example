@@ -11,13 +11,9 @@ func echo(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "yoo people wassup!")
 }
 
-//func UrlParams(w http.ResponseWriter, r *http.Request) {
-//	if (r.)
-//}
-
 func main() {
 	http.HandleFunc("/", echo)
-	//http.HandleFunc("/user/", UrlParams)
+	http.HandleFunc("/user/", handlers.UrlParams)
 
 	http.ListenAndServe(":4080", nil)
 }
