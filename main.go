@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"./handlers"
 )
 
 func echo(w http.ResponseWriter, r *http.Request) {
