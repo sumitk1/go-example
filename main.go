@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"strings"
 
 	"html/template"
 	"log"
@@ -39,12 +41,44 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, p)
 }
 
+type IndexPageHandler struct {
+}
+
+func (this *IndexPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	path := r.URL.Path[1:]
+	log.Println("path = " + path)
+	data, err := ioutil.ReadFile("./view/template.html")
+
+	if err == nil {
+		var contentType string
+
+		if strings.HasSuffix(path, ".css") {
+			contentType = "text/css"
+		} else if strings.HasSuffix(path, ".js") {
+			contentType = "application/javascript"
+		} else if strings.HasSuffix(path, ".html") {
+			contentType = "text/html"
+		} else if strings.HasSuffix(path, ".png") {
+			contentType = "image/png"
+		} else {
+			contentType = "tect/plain"
+		}
+
+		w.Header().Add("Content Type", contentType)
+		w.Write(data)
+	} else {
+		log.Println("Err = " + err.Error())
+	}
+}
+
 func main() {
 	http.HandleFunc("/", echo)
 	log.Println("some log1 ... ")
 	http.HandleFunc("/user/", handlers.UrlParams)
 	log.Println("some log2 ... ")
 	http.HandleFunc("/edit/", editHandler)
+
+	http.Handle("/index", new(IndexPageHandler))
 
 	//person_handler := &person{fname: "my_first_name", lname: "my_last_name"}
 	//http.HandleFunc("/oop/", &person{fname: "my_first_name", lname: "my_last_name"})
