@@ -1,4 +1,4 @@
-package main
+package src
 
 import (
 	"fmt"
@@ -76,7 +76,7 @@ func main() {
 	log.Println("some log1 ... ")
 	http.HandleFunc("/user/", handlers.UrlParams)
 	log.Println("some log2 ... ")
-	http.HandleFunc("/edit/", handlers.editHandler)
+	http.HandleFunc("/edit/", editHandler)
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 
 	http.Handle("/index", new(IndexPageHandler))
