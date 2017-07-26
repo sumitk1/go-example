@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -22,4 +23,20 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 	p.Body = []byte("some good body!!")
 	t, _ := template.ParseFiles("../view/template.html")
 	t.Execute(w, p)
+}
+
+func postHandler(w http.ResponseWriter, r *http.Request) {
+	url := "http://www.google.com"
+	req, _ := http.NewRequest("POST", url, nil)
+	req.Header.Add("cache-control", "no-cache")
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+
+	body, _ := ioutil.ReadAll(res.Body)
+
+	fmt.Println(res)
+	fmt.Println(string(body))
+
 }

@@ -46,9 +46,9 @@ type IndexPageHandler struct {
 
 func (this *IndexPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path[1:]
-	log.Println("path = " + path)
-	data, err := ioutil.ReadFile("./view/template.html")
 
+	data, err := ioutil.ReadFile("./view/index.gohtml")
+	log.Println("path = " + path)
 	if err == nil {
 		var contentType string
 
@@ -61,7 +61,7 @@ func (this *IndexPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 		} else if strings.HasSuffix(path, ".png") {
 			contentType = "image/png"
 		} else {
-			contentType = "tect/plain"
+			contentType = "text/plain"
 		}
 
 		w.Header().Add("Content Type", contentType)
@@ -76,9 +76,12 @@ func main() {
 	log.Println("some log1 ... ")
 	http.HandleFunc("/user/", handlers.UrlParams)
 	log.Println("some log2 ... ")
-	http.HandleFunc("/edit/", editHandler)
+	http.HandleFunc("/edit/", handlers.editHandler)
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 
 	http.Handle("/index", new(IndexPageHandler))
+
+	http.HandleFunc("/post/", postHandler)
 
 	//person_handler := &person{fname: "my_first_name", lname: "my_last_name"}
 	//http.HandleFunc("/oop/", &person{fname: "my_first_name", lname: "my_last_name"})
