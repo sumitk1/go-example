@@ -1,4 +1,4 @@
-package src
+package main
 
 import (
 	"fmt"
@@ -69,6 +69,22 @@ func (this *IndexPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 	} else {
 		log.Println("Err = " + err.Error())
 	}
+}
+
+func postHandler(w http.ResponseWriter, r *http.Request) {
+	url := "http://www.google.com"
+	req, _ := http.NewRequest("GET", url, nil)
+	req.Header.Add("cache-control", "no-cache")
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+
+	body, _ := ioutil.ReadAll(res.Body)
+
+	fmt.Println(res)
+	fmt.Println(string(body))
+	w.Write(body)
 }
 
 func main() {
